@@ -1,0 +1,390 @@
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => 1
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => 1
+                    [1] => 12
+                )
+
+        )
+
+)
+ID do item criado: SELECT * FROM lastInsertId
+Opção inserida: Array
+(
+    [id_item] => NotORM_Result Object
+        (
+            [single:protected] => 
+            [select:protected] => Array
+                (
+                )
+
+            [conditions:protected] => Array
+                (
+                )
+
+            [where:protected] => Array
+                (
+                )
+
+            [parameters:protected] => Array
+                (
+                )
+
+            [order:protected] => Array
+                (
+                )
+
+            [limit:protected] => 
+            [offset:protected] => 
+            [group:protected] => 
+            [having:protected] => 
+            [lock:protected] => 
+            [union:protected] => Array
+                (
+                )
+
+            [unionOrder:protected] => Array
+                (
+                )
+
+            [unionLimit:protected] => 
+            [unionOffset:protected] => 
+            [data:protected] => 
+            [referencing:protected] => Array
+                (
+                )
+
+            [aggregation:protected] => Array
+                (
+                )
+
+            [accessed:protected] => 
+            [access:protected] => 
+            [keys:protected] => Array
+                (
+                )
+
+            [connection:protected] => 
+            [driver:protected] => 
+            [structure:protected] => 
+            [cache:protected] => 
+            [notORM:protected] => NotORM Object
+                (
+                    [connection:protected] => PDO Object
+                        (
+                        )
+
+                    [driver:protected] => mysql
+                    [structure:protected] => NotORM_Structure_Convention Object
+                        (
+                            [primary:protected] => id
+                            [foreign:protected] => %s_id
+                            [table:protected] => %s
+                            [prefix:protected] => 
+                        )
+
+                    [cache:protected] => 
+                    [notORM:protected] => 
+                    [table:protected] => 
+                    [primary:protected] => 
+                    [rows:protected] => 
+                    [referenced:protected] => Array
+                        (
+                        )
+
+                    [debug:protected] => 
+                    [debugTimer:protected] => 
+                    [freeze:protected] => 
+                    [rowClass:protected] => NotORM_Row
+                    [jsonAsArray:protected] => 
+                )
+
+            [table:protected] => lastInsertId
+            [primary:protected] => id
+            [rows:protected] => 
+            [referenced:protected] => Array
+                (
+                )
+
+            [debug:protected] => 
+            [debugTimer:protected] => 
+            [freeze:protected] => 
+            [rowClass:protected] => NotORM_Row
+            [jsonAsArray:protected] => 
+        )
+
+    [opcao] => 1
+)
+Opção inserida: Array
+(
+    [id_item] => NotORM_Result Object
+        (
+            [single:protected] => 
+            [select:protected] => Array
+                (
+                )
+
+            [conditions:protected] => Array
+                (
+                )
+
+            [where:protected] => Array
+                (
+                )
+
+            [parameters:protected] => Array
+                (
+                )
+
+            [order:protected] => Array
+                (
+                )
+
+            [limit:protected] => 
+            [offset:protected] => 
+            [group:protected] => 
+            [having:protected] => 
+            [lock:protected] => 
+            [union:protected] => Array
+                (
+                )
+
+            [unionOrder:protected] => Array
+                (
+                )
+
+            [unionLimit:protected] => 
+            [unionOffset:protected] => 
+            [data:protected] => 
+            [referencing:protected] => Array
+                (
+                )
+
+            [aggregation:protected] => Array
+                (
+                )
+
+            [accessed:protected] => 
+            [access:protected] => 
+            [keys:protected] => Array
+                (
+                )
+
+            [connection:protected] => 
+            [driver:protected] => 
+            [structure:protected] => 
+            [cache:protected] => 
+            [notORM:protected] => NotORM Object
+                (
+                    [connection:protected] => PDO Object
+                        (
+                        )
+
+                    [driver:protected] => mysql
+                    [structure:protected] => NotORM_Structure_Convention Object
+                        (
+                            [primary:protected] => id
+                            [foreign:protected] => %s_id
+                            [table:protected] => %s
+                            [prefix:protected] => 
+                        )
+
+                    [cache:protected] => 
+                    [notORM:protected] => 
+                    [table:protected] => 
+                    [primary:protected] => 
+                    [rows:protected] => 
+                    [referenced:protected] => Array
+                        (
+                        )
+
+                    [debug:protected] => 
+                    [debugTimer:protected] => 
+                    [freeze:protected] => 
+                    [rowClass:protected] => NotORM_Row
+                    [jsonAsArray:protected] => 
+                )
+
+            [table:protected] => lastInsertId
+            [primary:protected] => id
+            [rows:protected] => 
+            [referenced:protected] => Array
+                (
+                )
+
+            [debug:protected] => 
+            [debugTimer:protected] => 
+            [freeze:protected] => 
+            [rowClass:protected] => NotORM_Row
+            [jsonAsArray:protected] => 
+        )
+
+    [opcao] => 12
+)
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => 213
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => 12323
+                    [1] => 333
+                )
+
+        )
+
+)
+ID do item criado: 16
+Opção inserida: Array
+(
+    [id_item] => 16
+    [opcao] => 12323
+)
+Opção inserida: Array
+(
+    [id_item] => 16
+    [opcao] => 333
+)
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => Bebidas
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => Suco
+                )
+
+        )
+
+)
+ID do item criado: 18
+Opção inserida: Array
+(
+    [id_item] => 18
+    [opcao] => Suco
+)
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => Pratos
+            [1] => frango assado
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => File com legumes
+                )
+
+        )
+
+)
+ID do item criado: 20
+Opção inserida: Array
+(
+    [id_item] => 20
+    [opcao] => File com legumes
+)
+ID do item criado: 22
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => Bebidas
+            [1] => Prato
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => Suco
+                    [1] => Leite
+                )
+
+            [1] => Array
+                (
+                    [0] => Legumes
+                )
+
+        )
+
+)
+ID do item criado: 23
+Opção inserida: Array
+(
+    [id_item] => 23
+    [opcao] => Suco
+)
+Opção inserida: Array
+(
+    [id_item] => 23
+    [opcao] => Leite
+)
+ID do item criado: 24
+Opção inserida: Array
+(
+    [id_item] => 24
+    [opcao] => Legumes
+)
+Array
+(
+    [id] => 
+    [nome] => 1
+    [items] => Array
+        (
+            [0] => Branches
+        )
+
+    [options] => Array
+        (
+            [0] => Array
+                (
+                    [0] => teste1
+                    [1] => teste2
+                )
+
+        )
+
+)
+ID do item criado: 25
+Opção inserida: Array
+(
+    [id_item] => 25
+    [opcao] => teste1
+)
+Opção inserida: Array
+(
+    [id_item] => 25
+    [opcao] => teste2
+)

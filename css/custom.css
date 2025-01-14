@@ -1,0 +1,46 @@
+div.modal-dialog div.modal-header {
+    text-align: left;
+}
+.ui-sortable-helper {
+    border: 1px solid #EEE;
+    background: #fff;
+}
+.ui-sortable-helper td:first-child {
+    width: 300px;
+}
+.ui-sortable-helper td.td-medico {
+    width: 200px;
+}
+div.auth-box .logo h5 {
+    color: #0692bb;
+}
+input[type=datetime-local] {
+    border: none !important;
+}
+.select2-container--default .select2-selection--single { 
+    border: none;
+}
+select.form-control {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+/* Printer */
+@page {
+    size:  auto;
+    margin: 0mm;
+}
+@media print {
+    header, aside,
+    div.d-md-flex .btn, table td a {
+        display: none !important;
+    }
+    div.page-wrapper {
+        margin-left: 0 !important;
+    }
+    span.badge {
+        color: #000 !important;
+        border: none;
+    }
+}
