@@ -33,8 +33,17 @@
                     <i class="ti-trash"></i>
                 </a>
                 <a class="btn btn-sm btn-rounded btn-primary text-white" href="index.php?controle=categoria&acao=formCategoria&id=<?php echo $categoria['id'] ?>">
-                                                    <i class="ti-pencil-alt" aria-hidden="true"></i>
-                                                </a>
+                    <i class="ti-pencil-alt" aria-hidden="true"></i>
+                </a>
+                <?php if( $categoria['ativo'] == '1' ): ?>
+                    <a class="btn btn-sm btn-rounded btn-success text-white pull-left" title="Inativar" href="javascript:checkin(<?php echo $categoria['id'] ?>, <?php echo $categoria['ativo']; ?>);">
+                        <i class="ti ti-check"> Ativo</i>
+                    </a>
+                <?php else: ?>
+                    <a class="btn btn-sm btn-rounded btn-danger text-white pull-left" title="Ativar" href="javascript:checkin(<?php echo $categoria['id'] ?>, <?php echo $categoria['ativo']; ?>);">
+                        <i class="ti ti-close"> Inativo</i>
+                    </a>
+                <?php endif; ?>
                 <div class="table-responsive">
                     <table class="table m-0">
                         <thead>
@@ -97,5 +106,25 @@
                 window.location = 'index.php?controle=categoria&acao=removerItem&id='+id;
             }
         });
+    }
+    function checkin(id, ativo) {
+        if(ativo == 1){
+            confirme("Deseja inativar o pedido?", function(rs) {
+                if( rs ) {
+                    window.location = 'index.php?controle=categoria&acao=inativar&id='+id;
+                }
+            });
+            return false;
+        }else if(ativo == 0){
+            confirme("Deseja ativar o pedido?", function(rs) {
+                if( rs ) {
+                    window.location = 'index.php?controle=categoria&acao=ativar&id='+id;
+                }
+            });
+            return false;
+        } else{
+            alert("Erro! Tente novamente");
+            location.reload();
+        }
     }
 </script>

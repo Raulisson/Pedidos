@@ -74,27 +74,29 @@
                         </div>
 
                         <?php foreach($this->categorias as $categoria): ?>
-                            <!-- Categoria -->
-                            <div class="form-group mb-4">
-                                <label class="col-md-12 p-0"><?php echo utf8_encode($categoria['categoria']) ?> - <?php echo utf8_encode($categoria['descricao']) ?></label>
-                            </div>
-
-                            <?php foreach($this->categorias_items as $categoria_item): ?>
-                                <!-- Item/Opção -->
+                            <?php if($categoria['ativo'] == '1'): ?>
+                                <!-- Categoria -->
                                 <div class="form-group mb-4">
-                                <?php if($categoria_item['id_categoria'] == $categoria['id']): ?>
-                                <label class="col-md-12 p-0"><?php echo utf8_encode($categoria_item['item']) ?></label>
-                                    <div class="col-md-12 border-bottom p-0" data-min="<?php echo $categoria_item['min'] ?>" 
-                                    data-max="<?php echo $categoria_item['max'] ?>" >
-                                        <?php foreach($this->items_opcoes as $item_opcao): ?>
-                                            <?php if($item_opcao['id_item'] == $categoria_item['id']): ?>
-                                                <label><input type="checkbox" name="opcoes[]" value="<?php echo $categoria['id'] . '|' . $categoria_item['id'] . '|' . utf8_encode($item_opcao['opcao']); ?>"> <?php echo utf8_encode($item_opcao['opcao']) ?></label><br>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                            </br>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                                    <label class="col-md-12 p-0"><?php echo utf8_encode($categoria['categoria']) ?> - <?php echo utf8_encode($categoria['descricao']) ?></label>
+                                </div>
+
+                                <?php foreach($this->categorias_items as $categoria_item): ?>
+                                    <!-- Item/Opção -->
+                                    <div class="form-group mb-4">
+                                    <?php if($categoria_item['id_categoria'] == $categoria['id']): ?>
+                                    <label class="col-md-12 p-0"><?php echo utf8_encode($categoria_item['item']) ?></label>
+                                        <div class="col-md-12 border-bottom p-0" data-min="<?php echo $categoria_item['min'] ?>" 
+                                        data-max="<?php echo $categoria_item['max'] ?>" >
+                                            <?php foreach($this->items_opcoes as $item_opcao): ?>
+                                                <?php if($item_opcao['id_item'] == $categoria_item['id']): ?>
+                                                    <label><input type="checkbox" name="opcoes[]" value="<?php echo $categoria['id'] . '|' . $categoria_item['id'] . '|' . utf8_encode($item_opcao['opcao']); ?>"> <?php echo utf8_encode($item_opcao['opcao']) ?></label><br>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+                                                </br>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php endforeach; ?>
 
                         <!-- Sumit -->

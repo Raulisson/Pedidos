@@ -23,28 +23,25 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-xlg-12 col-md-12">
-            <div class="white-box">
-                <?php $id_url = isset($_GET['id']) ? $_GET['id'] : null; ?>
-                <?php foreach($this->categorias as $categoria): ?>
-                <div class="category" style="border-bottom: 1px solid blue; margin-bottom: 20px;">
-                    <h2><?php echo utf8_encode($categoria['categoria']) ?></h2>
-                    <ul>
-                        <?php foreach($this->items as $item): ?>
-                            <?php foreach($this->pedidos_opcoes as $opcao): ?>
-                                <?php if($opcao['id_item'] == $item['id'] && $opcao['id_categoria'] == $categoria['id'] && $opcao['id_pedido'] == $id_url): ?>
-                                    <li>
-                                        <strong><?php echo utf8_encode($item['item']) ?>:</strong>
-                                    <?php echo utf8_encode($opcao['opcao']) ?>
-                                    </li>
-                                <?php endif; ?>
+        <div class="white-box">
+            <?php if (!empty($this->data)): ?>
+                <?php foreach ($this->data as $categoria): ?>
+                    <div class="category" style="border-bottom: 1px solid blue; margin-bottom: 20px;">
+                        <h2><?php echo $categoria['categoria']; ?></h2>
+                        <ul>
+                            <?php foreach ($categoria['items'] as $item): ?>
+                                <li>
+                                    <strong><?php echo $item['item']; ?>:</strong>
+                                    <?php echo implode(', ', $item['opcoes']); ?>
+                                </li>
                             <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
                 <?php endforeach; ?>
-
-                
-            </div>
+            <?php else: ?>
+                <p>Nenhum dado encontrado para este pedido.</p>
+            <?php endif; ?>
+        </div>
         </div>
     </div>
 </div>

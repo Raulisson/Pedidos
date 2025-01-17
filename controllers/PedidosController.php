@@ -26,17 +26,56 @@
 
         public function impressao() {
             $db = Database::getConn(true);
+            $id_pedido = isset($_GET['id']) ? $_GET['id'] : null;
+            $this->pedidos = $db->pedido('id', $_GET['id'])->where('id', $_GET['id'])->fetch();
+            if ($id_pedido) {
+                // Buscar categorias
+                $categorias_result = $db->categoria()->order('id');
+        
+                $data = [];
+                foreach ($categorias_result as $categoria) {
+                    $items_result = $db->categoria_item()->where('id_categoria', $categoria['id']);
+        
+                    $items_data = [];
+                    foreach ($items_result as $item) {
+                        $opcoes_result = $db->pedido_opcao()
+                            ->where('id_item', $item['id'])
+                            ->where('id_pedido', $id_pedido);
+        
+                        $opcoes_data = [];
+                        foreach ($opcoes_result as $opcao) {
+                            $opcoes_data[] = utf8_encode($opcao['opcao']);
+                        }
+        
+                        $items_data[] = [
+                            'item' => utf8_encode($item['item']),
+                            'opcoes' => $opcoes_data,
+                        ];
+                    }
+        
+                    
+                    $temOpcoes = false;
+                    foreach ($items_data as $itemData) {
+                        if (!empty($itemData['opcoes'])) {
+                            $temOpcoes = true;
+                            break;
+                        }
+                    }
 
-            if( isset($_GET['id']) ) {
-                $this->pedidos = $db->pedido('id', $_GET['id'])->where('id', $_GET['id'])->fetch();
-                $this->pedidos_opcoes = $db->pedido_opcao()->order('id');
-                
-                $this->categorias = $db->categoria()->order('id');
-                $this->items = $db->categoria_item()->order('id');
+                    if ($temOpcoes) {
+                        $data[] = [
+                            'categoria' => utf8_encode($categoria['categoria']),
+                            'descricao' => utf8_encode($categoria['descricao']),
+                            'items' => $items_data,
+                        ];
+                    }
+                }
+        
+                $this->data = $data;
                 $this->render('pedidos/impressao');
             }
-            
         }
+        
 
         /**
          * Salva um Pedido
@@ -57,7 +96,6 @@
             // Processar as opções selecionadas
             if (!empty($_POST['opcoes'])) {
                 foreach ($_POST['opcoes'] as $opcao) {
-                    // Separar os valores enviados no `value` (id_categoria|id_item|opcao)
                     list($id_categoria, $id_item, $opcaoValor) = explode('|', $opcao);
         
                     $pedido_opcao = [

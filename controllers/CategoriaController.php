@@ -159,5 +159,23 @@
                 Util::redirect('index.php?controle=categoria&acao=listar');
             }
         }
+
+        /**
+         * Realiza a troca de status da categoria
+         */
+        public function ativar() {
+            $db = Database::getConn();
+            $categoria = $db->categoria('id', $_GET['id'])->fetch();
+            $categoria['ativo'] = 1;
+            $categoria->update();
+            Util::redirect('index.php?controle=categoria&acao=listar');
+        }
+        public function inativar() {
+            $db = Database::getConn();
+            $categoria = $db->categoria('id', $_GET['id'])->fetch();
+            $categoria['ativo'] = 0;
+            $categoria->update();
+            Util::redirect('index.php?controle=categoria&acao=listar');
+        }
     }
 ?>
