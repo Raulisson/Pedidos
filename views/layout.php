@@ -128,6 +128,9 @@
                         <!-- MENU - PEDIDOS -->
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.php?controle=pedidos&acao=listar" aria-expanded="false"><i class="fa fa-street-view" aria-hidden="true"></i><span class="hide-menu">Pedidos</span></a></li>
 
+                        <!-- MENU - CARDAPIOS -->
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.php?controle=cardapio&acao=listar" aria-expanded="false"><i class="fa fa-book" aria-hidden="true"></i><span class="hide-menu">Cardapios</span></a></li>
+
                         <!-- MENU - CATEGORIAS -->
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.php?controle=categoria&acao=listar" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i><span class="hide-menu">Categorias</span></a></li>
 

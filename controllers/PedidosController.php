@@ -7,62 +7,100 @@
         */
         public function listar() {
             $db = Database::getConn(true);
-
-            $this->pedidos = $db->pedido()->order('data_cirurgia DESC');
+        
+            // Captura o filtro
+            $filters = array();
+            if (!empty($_GET['search'])) {
+                $filtro = $_GET['search'];
+                $filters['data_cirurgia LIKE ?'] = "%" . $filtro . "%";
+            }
+        
+            $this->pagination = new Pagination('pedido', 'data_cirurgia DESC', $filters);
+            $this->pedidos = $this->pagination->rows;
             $this->render('pedidos/lista');
         }
+        
 
         /**
          * Formulário de Pedidoss
          */
         public function form() {
             $db = Database::getConn();
+        
+            // Buscar todos os cardápios
+            $this->cardapios = $db->cardapio()->order('id');
+        
+            // Buscar todas as categorias, itens e opções disponíveis
             $this->categorias = $db->categoria()->order('id');
-            $this->categorias_items = $db->categoria_item()->order('id');
-            $this->items_opcoes = $db->item_opcao()->order('id');
+            $this->itens = $db->categoria_item()->order('id');
+            $this->opcoes = $db->item_opcao()->order('id');
+        
+            // Buscar todas as opções vinculadas aos cardápios
+            $this->cardapio_opcoes = $db->cardapio_opcoes()->order('id');
+            if(!empty($_GET['id_cardapio'])){
+                $this->id_cardapio = $_GET['id_cardapio'];
+            }else{
+                $this->id_cardapio = '';
+            }
             $this->render('pedidos/form');
         }
+        
         
 
         public function impressao() {
             $db = Database::getConn(true);
-            $id_pedido = isset($_GET['id']) ? $_GET['id'] : null;
-            $this->pedidos = $db->pedido('id', $_GET['id'])->where('id', $_GET['id'])->fetch();
-            if ($id_pedido) {
-                // Buscar categorias
-                $categorias_result = $db->categoria()->order('id');
+            $id_pedidos = isset($_POST['pedidos']) ? $_POST['pedidos'] : [];
         
-                $data = [];
-                foreach ($categorias_result as $categoria) {
-                    $items_result = $db->categoria_item()->where('id_categoria', $categoria['id']);
+            if (empty($id_pedidos)) {
+                return;
+            }
         
+            $this->pedidos = [];
+            foreach ($db->pedido()->where('id', $id_pedidos) as $pedido) {
+                $this->pedidos[] = $pedido;
+            }
+
+            // Buscar categorias
+            $categorias_result = $db->categoria()->order('id');
+        
+            $data = [];
+            foreach ($categorias_result as $categoria) {
+                $items_result = $db->categoria_item()
+                    ->select("id")
+                    ->where('id_categoria', $categoria['id'])
+                    ->where('id', $db->pedido_opcao()->select("DISTINCT id_item")->where('id_pedido', $id_pedidos))
+                    ->fetchPairs('id', 'id');
+        
+                if (!empty($items_result)) {
                     $items_data = [];
-                    foreach ($items_result as $item) {
+        
+                    foreach ($items_result as $id_item) {
+                        $item = $db->categoria_item('id', $id_item)->fetch();
+                        if (!$item) continue;
+        
                         $opcoes_result = $db->pedido_opcao()
-                            ->where('id_item', $item['id'])
-                            ->where('id_pedido', $id_pedido);
+                            ->where('id_item', $id_item)
+                            ->where('id_pedido', $id_pedidos)
+                            ->fetchPairs('id_opcao', 'id_opcao'); 
         
                         $opcoes_data = [];
-                        foreach ($opcoes_result as $opcao) {
-                            $opcoes_data[] = utf8_encode($opcao['opcao']);
+                        if (!empty($opcoes_result)) {
+                            $opcoes_nomes = $db->item_opcao()
+                                ->where('id', array_keys($opcoes_result))
+                                ->fetchPairs('id', 'opcao'); 
+        
+                            $opcoes_data = array_values($opcoes_nomes);
                         }
         
-                        $items_data[] = [
-                            'item' => utf8_encode($item['item']),
-                            'opcoes' => $opcoes_data,
-                        ];
-                    }
-        
-                    
-                    $temOpcoes = false;
-                    foreach ($items_data as $itemData) {
-                        if (!empty($itemData['opcoes'])) {
-                            $temOpcoes = true;
-                            break;
+                        if (!empty($opcoes_data)) {
+                            $items_data[] = [
+                                'item' => utf8_encode($item['item']),
+                                'opcoes' => $opcoes_data,
+                            ];
                         }
                     }
-
-                    if ($temOpcoes) {
+        
+                    if (!empty($items_data)) {
                         $data[] = [
                             'categoria' => utf8_encode($categoria['categoria']),
                             'descricao' => utf8_encode($categoria['descricao']),
@@ -70,11 +108,13 @@
                         ];
                     }
                 }
-        
-                $this->data = $data;
-                $this->render('pedidos/impressao');
             }
+        
+            $this->data = $data;
+            $this->render('pedidos/impressao');
         }
+        
+        
         
 
         /**
@@ -82,18 +122,17 @@
          */
         public function salvar() {
             $db = Database::getConn();
-            $pedido = array();
-        
-            $pedido['nome'] = utf8_decode($_POST['nome']);
-            $pedido['email'] = utf8_decode($_POST['Email']);
-            $pedido['telefone'] = utf8_decode($_POST['Telefone']);
-            $pedido['data_cirurgia'] = $_POST['data'];
-            $pedido['alergia'] = utf8_decode($_POST['alergia']);
-        
             
+            $pedido = [
+                'nome' => utf8_decode($_POST['nome']),
+                'email' => utf8_decode($_POST['Email']),
+                'telefone' => utf8_decode($_POST['Telefone']),
+                'data_cirurgia' => $_POST['data'],
+                'alergia' => utf8_decode($_POST['alergia'])
+            ];
+        
             $pedidoId = $db->pedido()->insert($pedido);
         
-            // Processar as opções selecionadas
             if (!empty($_POST['opcoes'])) {
                 foreach ($_POST['opcoes'] as $opcao) {
                     list($id_categoria, $id_item, $opcaoValor) = explode('|', $opcao);
@@ -102,14 +141,15 @@
                         'id_pedido' => $pedidoId,
                         'id_categoria' => $id_categoria,
                         'id_item' => $id_item,
-                        'opcao' => utf8_decode($opcaoValor),
+                        'id_opcao' => utf8_decode($opcaoValor),
                     ];
                     $db->pedido_opcao()->insert($pedido_opcao);
                 }
             }
-        
+            
             Util::redirect('finalizado.php');
         }
+        
         
         
 

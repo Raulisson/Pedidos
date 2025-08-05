@@ -1,109 +1,102 @@
-<div class="page-breadcrumb bg-white p-4">
-    <div class="row align-items-center">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title text-uppercase font-medium font-14">Cardápio Hospital Dia</h4>
-        </div>
-        
-    </div>
-    <div class="row align-items-center">
-        <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-            <div class="d-md-flex">
-                <p>Estamos aqui para garantir que sua experiência seja única e inesquecível. Preparamos um cardápio especial para você. Sinta-se à vontade para escolher os itens de sua preferência, seguindo as instruções de cada categoria.
-
-    O café da manhã será servido para você e seu acompanhante, enquanto as demais refeições devem ser solicitadas separadamente para o acompanhante. Para facilitar, pedimos que você nos retorne com pelo menos 72 horas de antecedência antes da internação.
-
-    Agradecemos pela sua colaboração e estamos à disposição para qualquer dúvida!</p>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-xlg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form class="form-horizontal form-material" method="post" action="index.php?controle=pedidos&acao=salvar">
+                        <?php $id_cardapio = $this->id_cardapio; ?>
+                        
+                        <input type="hidden" name="id_cardapio" value="<?php echo htmlspecialchars($id_cardapio); ?>"/>
 
-                        <!-- Id -->
-                        <input type="hidden" name="id" value="<?php if( isset($this->agendamento) ) echo $this->agendamento['id'] ?>"/>
-
-                        <!-- Nome Completo -->
+                        <!-- Campos básicos -->
                         <div class="form-group mb-4">
                             <label class="col-md-12 p-0">Nome Completo</label>
                             <div class="col-md-12 border-bottom p-0">
-                                <input type="text" name="nome" placeholder="Nome" class="form-control p-0 border-0" required> 
+                                <input type="text" name="nome" class="form-control p-0 border-0" required>
                             </div>
                         </div>
-
-                        <!-- Email -->
                         <div class="form-group mb-4">
                             <label class="col-md-12 p-0">Email</label>
                             <div class="col-md-12 border-bottom p-0">
-                                <input type="text" name="Email" placeholder="Email" class="form-control p-0 border-0" required
-                                value=""> 
+                                <input type="email" name="Email" class="form-control p-0 border-0" required>
                             </div>
                         </div>
-
-                        <!-- Telefone -->
                         <div class="form-group mb-4">
                             <label class="col-md-12 p-0">Telefone</label>
                             <div class="col-md-12 border-bottom p-0">
-                                <input type="text" name="Telefone" placeholder="Telefone" class="form-control p-0 border-0" required
-                                value=""> 
+                                <input type="text" name="Telefone" class="form-control p-0 border-0" required>
                             </div>
                         </div>
-
-                        <!-- Data da Cirurgia -->
                         <div class="form-group mb-4">
                             <label class="col-md-12 p-0">Data da Cirurgia</label>
                             <div class="col-md-12 border-bottom p-0">
-                                <input type="datetime-local" name="data" placeholder="Data da Cirurgia" class="form-control p-0 border-0" required
-                                value=""> 
+                                <input type="datetime-local" name="data" class="form-control p-0 border-0" required>
                             </div>
                         </div>
-
-                        <!-- Alergia -->
                         <div class="form-group mb-4">
-                            <label class="col-md-12 p-0">Tem alguma alergia ou intolerância alimentar? Descreva:</label>
+                            <label class="col-md-12 p-0">Alergias ou Intolerâncias</label>
                             <div class="col-md-12 border-bottom p-0">
-                                <input type="text" name="alergia" placeholder="Tem alguma alergia ou intolerância alimentar? Descreva" class="form-control p-0 border-0" required
-                                value=""> 
+                                <input type="text" name="alergia" class="form-control p-0 border-0" required>
                             </div>
                         </div>
 
-                        <?php foreach($this->categorias as $categoria): ?>
-                            <?php if($categoria['ativo'] == '1'): ?>
-                                <!-- Categoria -->
-                                <div class="form-group mb-4">
-                                    <label class="col-md-12 p-0"><?php echo utf8_encode($categoria['categoria']) ?> - <?php echo utf8_encode($categoria['descricao']) ?></label>
-                                </div>
-
-                                <?php foreach($this->categorias_items as $categoria_item): ?>
-                                    <!-- Item/Opção -->
+                        <?php if ($id_cardapio): ?>
+                            <?php foreach ($this->cardapios as $cardapio): ?>
+                                <?php if ($cardapio['id'] == $id_cardapio): ?>
+                                    <?php 
+                                $categorias_usadas = [];
+                                foreach ($this->cardapio_opcoes as $cardapio_opcao): 
+                                    if ($cardapio_opcao['id_cardapio'] == $cardapio['id']):
+                                        $id_opcao = $cardapio_opcao['id_opcao'];                                
+                                        foreach ($this->opcoes as $opcao): 
+                                            if ($opcao['id'] == $cardapio_opcao['id_opcao']):
+                                                foreach ($this->itens as $item): 
+                                                    if ($item['id'] == $opcao['id_item']):
+                                                        foreach ($this->categorias as $categoria): 
+                                                            if ($categoria['id'] == $item['id_categoria']):
+                                                                $categorias_usadas[$categoria['id']]['nome'] = $categoria['categoria'];
+                                                                $categorias_usadas[$categoria['id']]['id'] = $categoria['id'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['nome'] = $item['item'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['id'] = $item['id'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['min'] = $item['min'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['max'] = $item['max'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['opcoes'][] = $opcao['opcao'];
+                                                                $categorias_usadas[$categoria['id']]['itens'][$item['id']]['opcoesId'][] = $opcao['id'];
+                                                            endif;
+                                                        endforeach;
+                                                    endif;
+                                                endforeach;
+                                            endif;
+                                        endforeach;
+                                    endif;
+                                endforeach;
+                                ?>
+                                <?php foreach ($categorias_usadas as $categoria): ?>
                                     <div class="form-group mb-4">
-                                    <?php if($categoria_item['id_categoria'] == $categoria['id']): ?>
-                                    <label class="col-md-12 p-0"><?php echo utf8_encode($categoria_item['item']) ?></label>
-                                        <div class="col-md-12 border-bottom p-0" data-min="<?php echo $categoria_item['min'] ?>" 
-                                        data-max="<?php echo $categoria_item['max'] ?>" >
-                                            <?php foreach($this->items_opcoes as $item_opcao): ?>
-                                                <?php if($item_opcao['id_item'] == $categoria_item['id']): ?>
-                                                    <label><input type="checkbox" name="opcoes[]" value="<?php echo $categoria['id'] . '|' . $categoria_item['id'] . '|' . utf8_encode($item_opcao['opcao']); ?>"> <?php echo utf8_encode($item_opcao['opcao']) ?></label><br>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        </div>
-                                                </br>
-                                    <?php endif; ?>
+                                        <label class="col-md-12 p-0"><?php echo utf8_encode($categoria['nome']); ?></label></br>
+                                        <?php foreach ($categoria['itens'] as $item): ?>
+                                            <label class="col-md-12 p-0"><?php echo utf8_encode($item['nome']); ?> (Selecione entre <?php echo $item['min']; ?> e <?php echo $item['max']; ?> opções)</label>
+                                            <div class="form-group" data-min="<?php echo $item['min']; ?>" data-max="<?php echo $item['max']; ?>">
+                                                <div class="col-md-12 border-bottom p-0">
+                                                <?php foreach ($item['opcoes'] as $key => $opcao): ?>
+                                                    <label class="d-block">
+                                                        <input type="checkbox" name="opcoes[]" value="<?php echo $categoria['id'] . '|' . $item['id'] . '|' . $item['opcoesId'][$key]; ?>">
+                                                        <?php echo htmlspecialchars($opcao); ?>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                                </div></br>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
-                        <!-- Sumit -->
+                    <?php else: ?>
+                        <p class="text-danger">Nenhum cardápio selecionado. Retorne e escolha um cardápio válido.</p>
+                    <?php endif; ?>
                         <div class="form-group">
                             <div class="col-sm-12 p-0">
-                                <button onclick="submit" class="btn btn-primary">Enviar</button>
-                                <!--<button onclick="history.go(-1)" class="btn btn-danger">Cancelar</button>-->
+                                <button type="submit" class="btn btn-primary">Enviar</button>
                             </div>
                         </div>
                     </form>
@@ -112,59 +105,61 @@
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const checkboxContainers = document.querySelectorAll('.col-md-12.border-bottom.p-0');
+    document.querySelectorAll('[data-min][data-max]').forEach(container => {
+        const min = parseInt(container.getAttribute('data-min'));
+        const max = parseInt(container.getAttribute('data-max'));
+        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
 
-        checkboxContainers.forEach(container => {
-            const min = parseInt(container.getAttribute('data-min'));
-            const max = parseInt(container.getAttribute('data-max'));
+        // Criar elemento para mensagem de erro abaixo do grupo de checkboxes
+        const errorMsg = document.createElement('p');
+        errorMsg.classList.add('text-danger');
+        errorMsg.style.display = 'none';
+        container.insertBefore(errorMsg, container.firstChild);
 
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
-
-                    // Desabilitar checkboxes
-                    if (checkedCount >= max) {
-                        checkboxes.forEach(cb => {
-                            if (!cb.checked) {
-                                cb.disabled = true;
-                            }
-                        });
-                    } else {
-                        checkboxes.forEach(cb => cb.disabled = false);
-                    }
-                });
-            });
-        });
-
-        // Validação no envio do formulário
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (event) => {
-            let isValid = true;
-
-            checkboxContainers.forEach(container => {
-                const min = parseInt(container.getAttribute('data-min'));
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
                 const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
 
-                if (checkedCount < min) {
-                    isValid = false;
-                    container.insertAdjacentHTML(
-                        'beforeend',
-                        `<p class="text-danger">Selecione pelo menos ${min} opções.</p>`
-                    );
+                if (checkedCount >= max) {
+                    checkboxes.forEach(cb => { if (!cb.checked) cb.disabled = true; });
                 } else {
-                    const errorMessage = container.querySelector('.text-danger');
-                    if (errorMessage) errorMessage.remove();
+                    checkboxes.forEach(cb => cb.disabled = false);
+                }
+
+                // Remover mensagem de erro
+                if (checkedCount >= min) {
+                    errorMsg.style.display = 'none';
                 }
             });
-
-            if (!isValid) {
-                event.preventDefault();
-                alert('Por favor, corrija os erros antes de enviar o formulário.');
-            }
         });
     });
+
+    // Verificação antes do envio do formulário
+    document.querySelector('form').addEventListener('submit', (event) => {
+        let valid = true;
+
+        document.querySelectorAll('[data-min][data-max]').forEach(container => {
+            const min = parseInt(container.getAttribute('data-min'));
+            const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
+            const errorMsg = container.querySelector('.text-danger');
+
+            if (checkedCount < min) {
+                valid = false;
+                errorMsg.textContent = `Selecione pelo menos ${min} opção(ões).`;
+                errorMsg.style.display = 'block';
+            } else {
+                errorMsg.style.display = 'none';
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+});
+
 </script>
+
